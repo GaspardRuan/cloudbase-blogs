@@ -57,17 +57,17 @@ export default {
         },
         {
           blogTitle: "Blog Card #1",
-          blogCoverPhoto: "stock-1",
+          blogCoverPhoto: "stock-2",
           blogDate: "May 1, 2021",
         },
         {
           blogTitle: "Blog Card #1",
-          blogCoverPhoto: "stock-1",
+          blogCoverPhoto: "stock-3",
           blogDate: "May 1, 2021",
         },
         {
           blogTitle: "Blog Card #1",
-          blogCoverPhoto: "stock-1",
+          blogCoverPhoto: "stock-4",
           blogDate: "May 1, 2021",
         },
       ],
@@ -81,7 +81,7 @@ export default {
   h3 {
     font-weight: 300;
     font-size: 28px;
-    // margin-top:
+    margin-bottom: 32px;
   }
 }
 </style>
