@@ -30,7 +30,7 @@
             <router-link class="link" :to="{ name: 'home' }"
               >Create Post</router-link
             >
-            <router-link class="link" :to="{ name: 'home' }"
+            <router-link class="link" :to="{ name: 'login' }"
               >Login In / Register</router-link
             >
           </ul>

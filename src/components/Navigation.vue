@@ -9,11 +9,11 @@
       <div class="nav-links">
         <ul v-show="!mobile">
           <router-link class="link" :to="{ name: 'home' }">Home</router-link>
-          <router-link class="link" :to="{ name: 'Blogs' }">Blogs</router-link>
+          <router-link class="link" :to="{ name: 'blogs' }">Blogs</router-link>
           <router-link class="link" :to="{ name: 'home' }"
             >Create Post</router-link
           >
-          <router-link class="link" :to="{ name: 'home' }"
+          <router-link class="link" :to="{ name: 'login' }"
             >Login/Register</router-link
           >
         </ul>
@@ -22,12 +22,12 @@
     <menuIcon @click="toggleMobileNav" class="menu-icon" v-show="mobile" />
     <transition name="mobile-nav">
       <ul class="mobile-nav" v-show="mobileNav">
-        <router-link class="link" :to="{ name: 'Blogs' }">Blogs</router-link>
+        <router-link class="link" :to="{ name: 'blogs' }">Blogs</router-link>
         <router-link class="link" :to="{ name: 'home' }">Home</router-link>
         <router-link class="link" :to="{ name: 'home' }"
           >Create Post</router-link
         >
-        <router-link class="link" :to="{ name: 'home' }"
+        <router-link class="link" :to="{ name: 'login' }"
           >Login/Register</router-link
         >
       </ul>
