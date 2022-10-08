@@ -11,7 +11,8 @@
 <script>
 import Navigation from "./components/Navigation.vue";
 import Footer from "./components/Footer.vue";
-
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
 export default {
   name: "app",
   components: { Navigation, Footer },
@@ -22,6 +23,13 @@ export default {
   },
   created() {
     this.checkRoute();
+    firebase.auth().onAuthStateChanged((user) => {
+      this.$store.commit("updateUser", user);
+      if (user) {
+        this.$store.dispatch("getCurrentUser");
+      }
+      console.log(this.$store.state.profileEmail);
+    });
   },
   mounted() {},
   methods: {
@@ -142,6 +150,12 @@ button,
   pointer-events: none !important;
   cursor: none !important;
   background-color: rgba(128, 128, 128, 0.5) !important;
+}
+
+.error {
+  text-align: center;
+  font-size: 12px;
+  color: red;
 }
 
 .blog-card-wrap {

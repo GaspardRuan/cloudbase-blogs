@@ -17,6 +17,46 @@
             >Login/Register</router-link
           >
         </ul>
+        <div class="profile" ref="profile">
+          <span>{{ $store.state.profileInitials }}</span>
+          <div class="profile-menu">
+            <div class="info">
+              <p class="initials">{{ $store.state.profileInitials }}</p>
+              <div class="right">
+                <p>
+                  {{ $store.state.profileFirstName }}
+                  {{ $store.state.profileLastName }}
+                </p>
+                <p>
+                  {{ $store.state.profileUserName }}
+                </p>
+                <p>
+                  {{ $store.state.profileEmail }}
+                </p>
+              </div>
+            </div>
+            <div class="options">
+              <div class="option">
+                <router-link class="option" to="#">
+                  <userIcon class="icon" />
+                  <p>Profile</p>
+                </router-link>
+              </div>
+              <div class="option">
+                <router-link class="option" to="#">
+                  <adminIcon class="icon" />
+                  <p>Admin</p>
+                </router-link>
+              </div>
+              <div class="option">
+                <router-link class="option" to="#">
+                  <signOutIcon class="icon" />
+                  <p>Sign Out</p>
+                </router-link>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </nav>
     <menuIcon @click="toggleMobileNav" class="menu-icon" v-show="mobile" />
@@ -37,10 +77,16 @@
 
 <script>
 import menuIcon from "../assets/Icons/bars-regular.svg";
+import userIcon from "../assets/Icons/user-alt-light.svg";
+import adminIcon from "../assets/Icons/user-crown-light.svg";
+import signOutIcon from "../assets/Icons/sign-out-alt-regular.svg";
 export default {
   name: "NavigationBar",
   components: {
     menuIcon,
+    userIcon,
+    adminIcon,
+    signOutIcon,
   },
   data() {
     return {
