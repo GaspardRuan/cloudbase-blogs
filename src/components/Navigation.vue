@@ -13,10 +13,11 @@
           <router-link class="link" :to="{ name: 'home' }"
             >Create Post</router-link
           >
-          <router-link class="link" :to="{ name: 'login' }"
+          <router-link v-if="!user" class="link" :to="{ name: 'login' }"
             >Login/Register</router-link
           >
         </ul>
+        <menuIcon @click="toggleMobileNav" class="menu-icon" v-show="mobile" />
         <div
           v-if="user"
           @click="toggleProfileMenu"
@@ -62,7 +63,7 @@
         </div>
       </div>
     </nav>
-    <menuIcon @click="toggleMobileNav" class="menu-icon" v-show="mobile" />
+
     <transition name="mobile-nav">
       <ul class="mobile-nav" v-show="mobileNav">
         <router-link class="link" :to="{ name: 'blogs' }">Blogs</router-link>
@@ -70,7 +71,7 @@
         <router-link class="link" :to="{ name: 'home' }"
           >Create Post</router-link
         >
-        <router-link class="link" :to="{ name: 'login' }"
+        <router-link v-if="!user" class="link" :to="{ name: 'login' }"
           >Login/Register</router-link
         >
       </ul>
@@ -192,6 +193,17 @@ header {
         }
       }
 
+      .menu-icon {
+        cursor: pointer;
+        position: relative;
+        // top: 32px;
+        right: 25px;
+        height: 25px;
+        width: auto;
+        align-items: center;
+        justify-content: center;
+      }
+
       .profile {
         position: relative;
         cursor: pointer;
@@ -278,14 +290,14 @@ header {
     }
   }
 
-  .menu-icon {
-    cursor: pointer;
-    position: absolute;
-    top: 32px;
-    right: 25px;
-    height: 25px;
-    width: auto;
-  }
+  // .menu-icon {
+  //   cursor: pointer;
+  //   position: absolute;
+  //   top: 32px;
+  //   right: 25px;
+  //   height: 25px;
+  //   width: auto;
+  // }
 
   .mobile-nav {
     padding: 20px;

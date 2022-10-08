@@ -30,7 +30,7 @@
             <router-link class="link" :to="{ name: 'home' }"
               >Create Post</router-link
             >
-            <router-link class="link" :to="{ name: 'login' }"
+            <router-link v-if="!user" class="link" :to="{ name: 'login' }"
               >Login In / Register</router-link
             >
           </ul>
@@ -51,6 +51,11 @@ import linkedin from "../assets/Icons/linkedin-brands.svg";
 export default {
   name: "FooterBar",
   components: { youTube, twitter, instagram, linkedin },
+  computed: {
+    user() {
+      return this.$store.state.user;
+    },
+  },
 };
 </script>
 
