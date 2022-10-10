@@ -121,10 +121,10 @@ export default {
       this.mobileNav = !this.mobileNav;
     },
 
-    toggleProfileMenu(e) {
-      if (e.target === this.$refs.profile) {
-        this.profileMenu = !this.profileMenu;
-      }
+    toggleProfileMenu() {
+      // if (e.target === this.$refs.profile) {
+      this.profileMenu = !this.profileMenu;
+      // }
     },
 
     signOut() {
