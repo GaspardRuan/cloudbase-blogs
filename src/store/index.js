@@ -36,6 +36,7 @@ export default new Vuex.Store({
     blogPhotoPreview: null,
 
     editPost: null,
+
     user: null,
     profileEmail: null,
     profileFirstName: null,
@@ -49,7 +50,7 @@ export default new Vuex.Store({
     newBlogPost(state, payload) {
       state.blogHTML = payload;
     },
-    updateBlogTitel(state, payload) {
+    updateBlogTitle(state, payload) {
       state.blogTitle = payload;
     },
     fileNameChange(state, payload) {

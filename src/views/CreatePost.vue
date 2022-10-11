@@ -1,5 +1,6 @@
 <template>
   <div class="create-post">
+    <BlogCoverPreview v-show="$store.state.blogPhotoPreview" />
     <div class="container">
       <div :class="{ invisible: !error }" class="err-message">
         <p><span>Error:</span>{{ this.errorMsg }}</p>
@@ -35,7 +36,7 @@
       </div>
       <div class="blog-actions">
         <button>Publish Blog</button>
-        <router-link class="router-button" :to="{ name: 'BlogPreview' }"
+        <router-link class="router-button" :to="{ name: 'preview' }"
           >Post Preview</router-link
         >
       </div>
@@ -45,13 +46,23 @@
 
 <script>
 import Quill from "quill";
+import BlogCoverPreview from "../components/BlogCoverPreview.vue";
+// import firebase from "firebase/compat/app";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import "firebase/compat/auth";
+// import db from "../firebase/firebaseInit";
 window.Quill = Quill;
 const ImageResize = require("quill-image-resize-module").default;
 Quill.register("modules/imageResize", ImageResize);
 
 export default {
   name: "CreatePost",
-  components: {},
+  components: { BlogCoverPreview },
   data() {
     return {
       error: null,
@@ -64,8 +75,6 @@ export default {
           imageResize: {},
         },
       },
-
-      imageHandler: {},
     };
   },
   computed: {
@@ -99,7 +108,31 @@ export default {
       this.$store.commit("fileNameChange", fileName);
       this.$store.commit("createFileURL", URL.createObjectURL(this.file));
     },
-    openPreview() {},
+    openPreview() {
+      this.$store.commit("openPhotoPreview");
+    },
+    imageHandler(file, Editor, cursorLocation, resetUploader) {
+      const storage = getStorage();
+      const docRef = ref(storage, `documents/blogPostPhotos/${file.name}`);
+      const uploadTask = uploadBytesResumable(docRef, file);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          var progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+        },
+        (err) => {
+          console.log(err);
+        },
+        async () => {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          Editor.insertEmbed(cursorLocation, "image", downloadURL);
+          console.log(downloadURL);
+          resetUploader();
+        }
+      );
+    },
   },
 };
 </script>
