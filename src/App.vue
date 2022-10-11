@@ -1,6 +1,7 @@
 <template>
   <div class="app-wrapper">
     <div class="app">
+      <Loading v-show="mainLoading" />
       <Navigation v-if="!navigation" />
       <router-view />
       <Footer v-if="!navigation" />
@@ -12,16 +13,18 @@
 import Navigation from "./components/Navigation.vue";
 import Footer from "./components/Footer.vue";
 import firebase from "firebase/compat/app";
+import Loading from "./components/Loading.vue";
 import "firebase/compat/auth";
 export default {
   name: "app",
-  components: { Navigation, Footer },
+  components: { Navigation, Footer, Loading },
   data() {
     return {
       navigation: null,
     };
   },
   created() {
+    this.mainLoading = true;
     this.checkRoute();
     firebase.auth().onAuthStateChanged((user) => {
       this.$store.commit("updateUser", user);
@@ -30,7 +33,18 @@ export default {
       }
       // console.log(this.$store.state.profileEmail);
     });
+
     this.$store.dispatch("getPost");
+  },
+  computed: {
+    mainLoading: {
+      get() {
+        return this.$store.state.mainLoading;
+      },
+      set(payload) {
+        this.$store.commit("setMainLoading", payload);
+      },
+    },
   },
   mounted() {},
   methods: {

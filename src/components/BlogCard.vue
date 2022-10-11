@@ -17,7 +17,10 @@
           new Date(post.blogDate).toLocaleString("en-us", { dateStyle: "long" })
         }}
       </h6>
-      <router-link class="link" :to="{ name: 'home' }">
+      <router-link
+        class="link"
+        :to="{ name: 'blog', params: { blogid: post.blogId } }"
+      >
         View The Post <Arrow class="arrow"
       /></router-link>
     </div>
@@ -52,7 +55,7 @@ export default {
   border-radius: 8px;
   background-color: #fff;
   min-height: 420px;
-  // max-height: 420px;
+  max-height: 520px;
   transition: 0.5s ease all;
   &:hover {
     transform: rotateZ(-1deg) scale(1.01);
@@ -105,6 +108,7 @@ export default {
     border-radius: 8px 8px 0 0;
     z-index: 1;
     width: 100%;
+    height: 100%;
     min-height: 200px;
     object-fit: cover;
   }

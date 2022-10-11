@@ -13,7 +13,11 @@
         >
           Register Login<Arrow class="arrow arrow-light" />
         </router-link>
-        <router-link v-else class="link" :to="{ name: 'home' }">
+        <router-link
+          v-else
+          class="link"
+          :to="{ name: 'blog', params: { blogid: post.blogId } }"
+        >
           View The Post <Arrow class="arrow" />
         </router-link>
       </div>

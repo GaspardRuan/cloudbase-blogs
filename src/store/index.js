@@ -7,28 +7,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    sampleBlogCards: [
-      {
-        blogTitle: "Blog Card #1",
-        blogCoverPhoto: "stock-1",
-        blogDate: "May 1, 2021",
-      },
-      {
-        blogTitle: "Blog Card #1",
-        blogCoverPhoto: "stock-2",
-        blogDate: "May 1, 2021",
-      },
-      {
-        blogTitle: "Blog Card #1",
-        blogCoverPhoto: "stock-3",
-        blogDate: "May 1, 2021",
-      },
-      {
-        blogTitle: "Blog Card #1",
-        blogCoverPhoto: "stock-4",
-        blogDate: "May 1, 2021",
-      },
-    ],
+    mainLoading: null,
+
     blogPosts: [],
     postLoaded: null,
     blogHTML: "Write your blog title here...",
@@ -56,6 +36,9 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    setMainLoading(state, payload) {
+      state.mainLoading = payload;
+    },
     newBlogPost(state, payload) {
       state.blogHTML = payload;
     },
@@ -131,7 +114,8 @@ export default new Vuex.Store({
         }
       });
       state.postLoaded = true;
-      console.log(state.blogPosts);
+      // console.log(state.blogPosts);
+      state.mainLoading = false;
     },
 
     async updateUserSettings({ commit, state }) {
