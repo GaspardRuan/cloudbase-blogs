@@ -1,7 +1,7 @@
 <template>
   <div class="app-wrapper">
-    <div class="app">
-      <Loading v-show="mainLoading" />
+    <Loading v-if="!this.$store.state.postLoaded" />
+    <div class="app" v-if="this.$store.state.postLoaded">
       <Navigation v-if="!navigation" />
       <router-view />
       <Footer v-if="!navigation" />
@@ -24,7 +24,6 @@ export default {
     };
   },
   created() {
-    this.mainLoading = true;
     this.checkRoute();
     firebase.auth().onAuthStateChanged((user) => {
       this.$store.commit("updateUser", user);
@@ -35,16 +34,6 @@ export default {
     });
 
     this.$store.dispatch("getPost");
-  },
-  computed: {
-    mainLoading: {
-      get() {
-        return this.$store.state.mainLoading;
-      },
-      set(payload) {
-        this.$store.commit("setMainLoading", payload);
-      },
-    },
   },
   mounted() {},
   methods: {

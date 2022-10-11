@@ -1,6 +1,7 @@
 <template>
   <div class="post-view">
-    <div class="container quillWrapper">
+    <Loading v-if="!currentBlog" />
+    <div class="container quillWrapper" v-if="currentBlog">
       <h2>{{ currentBlog[0].blogTitle }}</h2>
       <h4>
         Posted on:
@@ -20,6 +21,7 @@
 </template>
 
 <script>
+import Loading from "@/components/Loading.vue";
 export default {
   name: "ViewBlog",
   data() {
@@ -32,6 +34,7 @@ export default {
       return post.blogId === this.$route.params.blogid;
     });
   },
+  components: { Loading },
 };
 </script>
 

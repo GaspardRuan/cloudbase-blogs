@@ -7,8 +7,6 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    mainLoading: null,
-
     blogPosts: [],
     postLoaded: null,
     blogHTML: "Write your blog title here...",
@@ -36,9 +34,6 @@ export default new Vuex.Store({
     },
   },
   mutations: {
-    setMainLoading(state, payload) {
-      state.mainLoading = payload;
-    },
     newBlogPost(state, payload) {
       state.blogHTML = payload;
     },
@@ -115,7 +110,6 @@ export default new Vuex.Store({
       });
       state.postLoaded = true;
       // console.log(state.blogPosts);
-      state.mainLoading = false;
     },
 
     async updateUserSettings({ commit, state }) {
