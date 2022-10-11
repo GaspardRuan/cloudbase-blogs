@@ -55,7 +55,7 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import "firebase/compat/auth";
-// import db from "../firebase/firebaseInit";
+import db from "../firebase/firebaseInit";
 window.Quill = Quill;
 const ImageResize = require("quill-image-resize-module").default;
 Quill.register("modules/imageResize", ImageResize);
@@ -120,7 +120,7 @@ export default {
       uploadTask.on(
         "state_changed",
         (snapshot) => {
-          var progress =
+          const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           console.log("Upload is " + progress + "% done");
         },
@@ -139,6 +139,38 @@ export default {
     uploadBlog() {
       if (this.blogTitle.length !== 0 && this.blogHTML.length !== 0) {
         if (this.file) {
+          const storage = getStorage();
+          const docRef = ref(
+            storage,
+            `documents/blogCoverPhotos/${this.$store.state.blogPhotoName}`
+          );
+          const uploadTask = uploadBytesResumable(docRef, this.file);
+          uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+              const progress =
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              console.log("Upload is " + progress + "% done");
+            },
+            (err) => {
+              console.log(err);
+            },
+            async () => {
+              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+              const timestamp = await Date.now();
+              const dataBase = await db.collection("blogPosts").doc();
+
+              await dataBase.set({
+                blogId: dataBase.id,
+                blogHTML: this.blogHTML,
+                blogCoverPhoto: downloadURL,
+                blogCoverPhotoName: this.blogCoverPhotoName,
+                blogTitle: this.blogTitle,
+                profileId: this.profileId,
+                data: timestamp,
+              });
+            }
+          );
           return;
         }
         this.error = true;
