@@ -29,6 +29,8 @@ export default new Vuex.Store({
         blogDate: "May 1, 2021",
       },
     ],
+    blogPosts: [],
+    postLoaded: null,
     blogHTML: "Write your blog title here...",
     blogTitle: "",
     blogPhotoName: "",
@@ -45,7 +47,14 @@ export default new Vuex.Store({
     profileId: null,
     profileInitials: null,
   },
-  getters: {},
+  getters: {
+    blogPostsFeed(state) {
+      return state.blogPosts.slice(0, 2);
+    },
+    blogPostsCards(state) {
+      return state.blogPosts.slice(2, 3);
+    },
+  },
   mutations: {
     newBlogPost(state, payload) {
       state.blogHTML = payload;
@@ -102,6 +111,27 @@ export default new Vuex.Store({
       // console.log("store:");
       // console.log(dbResults);
       // console.log(dbResults.data().email);
+    },
+
+    async getPost({ state }) {
+      const dataBase = await db.collection("blogPosts").orderBy("date", "desc");
+      const dbResults = await dataBase.get();
+      dbResults.forEach((doc) => {
+        if (!state.blogPosts.some((post) => post.blogID === doc.id)) {
+          const blog = {
+            blogId: doc.data().blogId,
+            blogHTML: doc.data().blogHTML,
+            blogCoverPhoto: doc.data().blogCoverPhoto,
+            blogCoverPhotoName: doc.data().blogCoverPhotoName,
+            blogTitle: doc.data().blogTitle,
+            // profileId: doc.data().profileId,
+            blogDate: doc.data().date,
+          };
+          state.blogPosts.push(blog);
+        }
+      });
+      state.postLoaded = true;
+      console.log(state.blogPosts);
     },
 
     async updateUserSettings({ commit, state }) {

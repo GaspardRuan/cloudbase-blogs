@@ -8,7 +8,7 @@
         <Delete class="delete" />
       </div>
     </div>
-    <img :src="require(`../assets/blogCards/${post.blogCoverPhoto}.jpg`)" />
+    <img :src="post.blogCoverPhoto" />
     <div class="info">
       <h4>{{ post.blogTitle }}</h4>
       <h6>
@@ -52,6 +52,7 @@ export default {
   border-radius: 8px;
   background-color: #fff;
   min-height: 420px;
+  // max-height: 420px;
   transition: 0.5s ease all;
   &:hover {
     transform: rotateZ(-1deg) scale(1.01);

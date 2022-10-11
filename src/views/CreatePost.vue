@@ -134,7 +134,7 @@ export default {
         async () => {
           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
           Editor.insertEmbed(cursorLocation, "image", downloadURL);
-          console.log(downloadURL);
+          // console.log(downloadURL);
           resetUploader();
         }
       );
@@ -173,7 +173,7 @@ export default {
                 blogCoverPhotoName: this.blogCoverPhotoName,
                 blogTitle: this.blogTitle,
                 profileId: this.profileId,
-                data: timestamp,
+                date: timestamp,
               });
               this.loading = false;
               this.$router.push({ name: "blog" });
