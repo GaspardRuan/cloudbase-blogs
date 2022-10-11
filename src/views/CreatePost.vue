@@ -1,6 +1,7 @@
 <template>
   <div class="create-post">
     <BlogCoverPreview v-show="$store.state.blogPhotoPreview" />
+    <Loading v-show="loading" />
     <div class="container">
       <div :class="{ invisible: !error }" class="err-message">
         <p><span>Error:</span>{{ this.errorMsg }}</p>
@@ -56,13 +57,14 @@ import {
 } from "firebase/storage";
 import "firebase/compat/auth";
 import db from "../firebase/firebaseInit";
+import Loading from "@/components/Loading.vue";
 window.Quill = Quill;
 const ImageResize = require("quill-image-resize-module").default;
 Quill.register("modules/imageResize", ImageResize);
 
 export default {
   name: "CreatePost",
-  components: { BlogCoverPreview },
+  components: { BlogCoverPreview, Loading },
   data() {
     return {
       error: null,
@@ -75,6 +77,8 @@ export default {
           imageResize: {},
         },
       },
+
+      loading: null,
     };
   },
   computed: {
@@ -139,6 +143,7 @@ export default {
     uploadBlog() {
       if (this.blogTitle.length !== 0 && this.blogHTML.length !== 0) {
         if (this.file) {
+          this.loading = true;
           const storage = getStorage();
           const docRef = ref(
             storage,
@@ -154,6 +159,7 @@ export default {
             },
             (err) => {
               console.log(err);
+              this.loading = false;
             },
             async () => {
               const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
@@ -169,6 +175,8 @@ export default {
                 profileId: this.profileId,
                 data: timestamp,
               });
+              this.loading = false;
+              this.$router.push({ name: "blog" });
             }
           );
           return;
