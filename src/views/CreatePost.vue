@@ -35,7 +35,7 @@
         />
       </div>
       <div class="blog-actions">
-        <button>Publish Blog</button>
+        <button @click="uploadBlog">Publish Blog</button>
         <router-link class="router-button" :to="{ name: 'preview' }"
           >Post Preview</router-link
         >
@@ -108,9 +108,11 @@ export default {
       this.$store.commit("fileNameChange", fileName);
       this.$store.commit("createFileURL", URL.createObjectURL(this.file));
     },
+
     openPreview() {
       this.$store.commit("openPhotoPreview");
     },
+
     imageHandler(file, Editor, cursorLocation, resetUploader) {
       const storage = getStorage();
       const docRef = ref(storage, `documents/blogPostPhotos/${file.name}`);
@@ -132,6 +134,27 @@ export default {
           resetUploader();
         }
       );
+    },
+
+    uploadBlog() {
+      if (this.blogTitle.length !== 0 && this.blogHTML.length !== 0) {
+        if (this.file) {
+          return;
+        }
+        this.error = true;
+        this.errorMsg = "Please ensure you upload a cover photo;";
+        setTimeout(() => {
+          this.error = false;
+        }, 5000);
+        return;
+      }
+      this.error = true;
+      this.errorMsg =
+        "Please ensure Blog Title and Blgo Post have been filled!;";
+      setTimeout(() => {
+        this.error = false;
+      }, 5000);
+      return;
     },
   },
 };
