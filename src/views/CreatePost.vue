@@ -249,9 +249,9 @@ export default {
 
     .quillWrapper {
       position: relative;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
+      // display: flex;
+      // flex-direction: column;
+      height: 80%;
     }
 
     .ql-container {
