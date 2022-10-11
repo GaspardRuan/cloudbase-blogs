@@ -7,6 +7,8 @@ import RegisterView from "../views/RegisterView.vue";
 import PasswordView from "../views/ForgetPassword.vue";
 import ProfileView from "../views/ProfileView.vue";
 import AdminView from "../views/AdminView.vue";
+import CreatePost from "../views/CreatePost.vue";
+import BlogPreview from "../views/BlogPreview.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -64,6 +66,22 @@ const routes = [
     component: AdminView,
     meta: {
       title: "Admin",
+    },
+  },
+  {
+    path: "/write",
+    name: "write",
+    component: CreatePost,
+    meta: {
+      title: "Write",
+    },
+  },
+  {
+    path: "/preview",
+    name: "preview",
+    component: BlogPreview,
+    meta: {
+      title: "Blog Preview",
     },
   },
 ];

@@ -13,7 +13,7 @@
           />
         </div>
         <span>{{ this.functionMsg }}</span>
-        <button @click="addAdmin" class="button">Submit</button>
+        <button @click.prevent="addAdmin" class="button">Submit</button>
       </div>
     </div>
   </div>
