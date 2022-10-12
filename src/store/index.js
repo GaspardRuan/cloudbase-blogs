@@ -34,6 +34,12 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    init(state) {
+      state.blogTitle = "";
+      state.blogHTML = "Write your blog title here...";
+      state.blogPhotoFileURL = "";
+      state.blogPhotoName = "";
+    },
     newBlogPost(state, payload) {
       state.blogHTML = payload;
     },

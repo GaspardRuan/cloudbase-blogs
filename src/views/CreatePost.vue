@@ -181,6 +181,7 @@ export default {
                 name: "blog",
                 params: { blogid: dataBase.id },
               });
+              this.$store.commit("init");
             }
           );
           return;
