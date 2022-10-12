@@ -12,9 +12,8 @@
 <script>
 import Navigation from "./components/Navigation.vue";
 import Footer from "./components/Footer.vue";
-import firebase from "firebase/compat/app";
 import Loading from "./components/Loading.vue";
-import "firebase/compat/auth";
+import cloudbase from "./tencent/init";
 export default {
   name: "app",
   components: { Navigation, Footer, Loading },
@@ -25,9 +24,9 @@ export default {
   },
   created() {
     this.checkRoute();
-    firebase.auth().onAuthStateChanged((user) => {
-      this.$store.commit("updateUser", user);
-      if (user) {
+    cloudbase.auth().onLoginStateChanged((loginState) => {
+      this.$store.commit("updateUser", loginState);
+      if (loginState) {
         this.$store.dispatch("getCurrentUser");
       }
       // console.log(this.$store.state.profileEmail);

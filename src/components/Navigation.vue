@@ -24,10 +24,20 @@
           class="profile"
           ref="profile"
         >
-          <span>{{ $store.state.profileInitials }}</span>
+          <img
+            v-if="$store.state.profileAvatar"
+            class="initials"
+            :src="this.$store.state.profileAvatar"
+          />
+          <img v-else class="initials" src="../assets/avatar.jpeg" />
           <div v-if="profileMenu" class="profile-menu">
             <div class="info">
-              <p class="initials">{{ $store.state.profileInitials }}</p>
+              <img
+                v-if="$store.state.profileAvatar"
+                class="initials"
+                :src="this.$store.state.profileAvatar"
+              />
+              <img v-else class="initials" src="../assets/avatar.jpeg" />
               <div class="right">
                 <p>
                   {{ $store.state.profileFirstName }}
@@ -84,7 +94,8 @@ import menuIcon from "../assets/Icons/bars-regular.svg";
 import userIcon from "../assets/Icons/user-alt-light.svg";
 import adminIcon from "../assets/Icons/user-crown-light.svg";
 import signOutIcon from "../assets/Icons/sign-out-alt-regular.svg";
-import firebase from "firebase/compat/app";
+// import firebase from "firebase/compat/app";
+import cloudbase from "../tencent/init";
 import "firebase/compat/auth";
 export default {
   name: "NavigationBar",
@@ -128,7 +139,10 @@ export default {
     },
 
     signOut() {
-      firebase.auth().signOut();
+      const auth = cloudbase.auth({
+        persistence: "none",
+      });
+      auth.signOut();
       window.location.reload();
     },
   },
@@ -218,6 +232,20 @@ header {
 
         span {
           pointer-events: none;
+        }
+
+        .initials {
+          position: initial;
+          width: 36px;
+          height: 36px;
+          font-size: 32px;
+          background-color: #303030;
+          color: #fff;
+          display: flex;
+          align-self: center;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
         }
 
         .profile-menu {

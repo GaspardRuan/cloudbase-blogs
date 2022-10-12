@@ -34,8 +34,7 @@
 import EmailIcon from "../assets/Icons/envelope-regular.svg";
 import Modal from "@/components/Modal.vue";
 import Loading from "../components/Loading.vue";
-import firebase from "firebase/compat/app";
-import "firebase/compat/auth";
+import cloudbase from "../tencent/init";
 export default {
   name: "PasswordPage",
   components: { EmailIcon, Modal, Loading },
@@ -54,7 +53,7 @@ export default {
     },
     resetPassword() {
       this.loading = true;
-      firebase
+      cloudbase
         .auth()
         .sendPasswordResetEmail(this.email)
         .then(() => {

@@ -1,8 +1,9 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import firebase from "firebase/compat/app";
+// import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import db from "../firebase/firebaseInit";
+import cloudbase from "../tencent/init";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -19,11 +20,10 @@ export default new Vuex.Store({
 
     user: null,
     profileEmail: null,
-    profileFirstName: null,
-    profileLastName: null,
+    profileFullName: null,
     profileUserName: null,
     profileId: null,
-    profileInitials: null,
+    profileAvatar: null,
   },
   getters: {
     blogPostsFeed(state) {
@@ -73,23 +73,15 @@ export default new Vuex.Store({
     updateUser(state, payload) {
       state.user = payload;
     },
-    setProfileInfo(state, doc) {
-      state.profileId = doc.id;
-      state.profileEmail = doc.data().email;
-      state.profileFirstName = doc.data().firstName;
-      state.profileLastName = doc.data().lastName;
-      state.profileUserName = doc.data().username;
+    setProfileInfo(state, user) {
+      state.profileId = user.uid;
+      state.profileEmail = user.email;
+      state.profileFullName = user.nickName;
+      state.profileUserName = user.username;
+      state.profileAvatar = user.avatarUrl;
     },
-    setProfileInitials(state) {
-      state.profileInitials =
-        state.profileFirstName.match(/(\b\S)?/g).join("") +
-        state.profileLastName.match(/(\b\S)?/g).join("");
-    },
-    changeFirstName(state, payload) {
-      state.profileFirstName = payload;
-    },
-    changeLastName(state, payload) {
-      state.profileLastName = payload;
+    changeFullName(state, payload) {
+      state.profileFullName = payload;
     },
     changeUserName(state, payload) {
       state.profileUserName = payload;
@@ -97,12 +89,13 @@ export default new Vuex.Store({
   },
   actions: {
     async getCurrentUser({ commit }) {
-      const dataBase = await db
-        .collection("users")
-        .doc(firebase.auth().currentUser.uid);
-      const dbResults = await dataBase.get();
-      commit("setProfileInfo", dbResults);
-      commit("setProfileInitials");
+      cloudbase
+        .auth()
+        .getCurrenUser()
+        .then((user) => {
+          commit("setProfileInfo", user);
+        });
+
       // console.log("store:");
       // console.log(dbResults);
       // console.log(dbResults.data().email);
@@ -140,14 +133,18 @@ export default new Vuex.Store({
       await getPost.delete();
     },
 
-    async updateUserSettings({ commit, state }) {
-      const dataBase = await db.collection("users").doc(state.profileId);
-      await dataBase.update({
-        firstName: state.profileFirstName,
-        lastName: state.profileLastName,
-        username: state.profileUserName,
+    async updateUserSettings({ state }) {
+      const user = cloudbase.auth().currentUser;
+      await user
+        .update({
+          nickName: state.profileFullName,
+        })
+        .then(() => {
+          console.log("fullname done");
+        });
+      await user.updateUsername(state.profileUserName).then(() => {
+        console.log("username done");
       });
-      commit("setProfileInitials");
     },
   },
   modules: {},

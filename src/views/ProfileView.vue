@@ -8,22 +8,23 @@
     <div class="container">
       <h2>Account Settings</h2>
       <div class="profile-info">
-        <div class="initials">{{ $store.state.profileInitials }}</div>
+        <img
+          v-if="$store.state.profileAvatar"
+          class="initials"
+          :src="this.$store.state.profileAvatar"
+        />
+        <img v-else class="initials" src="../assets/avatar.jpeg" />
         <div class="admin-badge">
           <adminIcon class="icon" />
           <span>admin</span>
         </div>
         <div class="input">
-          <label for="firstName">First Name:</label>
-          <input type="text" id="firstName" v-model="firstName" />
+          <label for="fullName">Full Name:</label>
+          <input type="text" id="FullName" v-model="fullName" />
         </div>
         <div class="input">
-          <label for="lastName">Last Name:</label>
-          <input type="text" id="lastName" v-model="lastName" />
-        </div>
-        <div class="input">
-          <label for="username">Username:</label>
-          <input type="text" id="username" v-model="username" />
+          <label for="userName">User Name:</label>
+          <input type="text" id="userName" v-model="userName" />
         </div>
         <div class="input">
           <label for="email">Email:</label>
@@ -58,23 +59,15 @@ export default {
     },
   },
   computed: {
-    firstName: {
+    fullName: {
       get() {
-        return this.$store.state.profileFirstName;
+        return this.$store.state.profileFullName;
       },
       set(payload) {
-        this.$store.commit("changeFirstName", payload);
+        this.$store.commit("changeFullName", payload);
       },
     },
-    lastName: {
-      get() {
-        return this.$store.state.profileLastName;
-      },
-      set(payload) {
-        this.$store.commit("changeLastName", payload);
-      },
-    },
-    username: {
+    userName: {
       get() {
         return this.$store.state.profileUserName;
       },

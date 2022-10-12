@@ -32,8 +32,7 @@
 <script>
 import EmailIcon from "../assets/Icons/envelope-regular.svg";
 import PasswordIcon from "../assets/Icons/lock-alt-solid.svg";
-import firebase from "firebase/compat/app";
-import "firebase/compat/auth";
+import cloudbase from "../tencent/init";
 export default {
   name: "LoginPage",
   components: { EmailIcon, PasswordIcon },
@@ -48,7 +47,7 @@ export default {
   created() {},
   methods: {
     login() {
-      firebase
+      cloudbase
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
         .then(() => {
