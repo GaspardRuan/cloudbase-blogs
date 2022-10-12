@@ -53,6 +53,11 @@ export default new Vuex.Store({
       state.editPost = payload;
       // console.log(state.editPost);
     },
+    filterBlogPost(state, payload) {
+      state.blogPosts = state.blogPosts.filter(
+        (post) => post.blogId !== payload
+      );
+    },
     updateUser(state, payload) {
       state.user = payload;
     },
@@ -95,7 +100,7 @@ export default new Vuex.Store({
       const dataBase = await db.collection("blogPosts").orderBy("date", "desc");
       const dbResults = await dataBase.get();
       dbResults.forEach((doc) => {
-        if (!state.blogPosts.some((post) => post.blogID === doc.id)) {
+        if (!state.blogPosts.some((post) => post.blogId === doc.id)) {
           const blog = {
             blogId: doc.data().blogId,
             blogHTML: doc.data().blogHTML,
@@ -110,6 +115,12 @@ export default new Vuex.Store({
       });
       state.postLoaded = true;
       // console.log(state.blogPosts);
+    },
+
+    async deletePost({ commit }, payload) {
+      commit("filterBlogPost", payload);
+      const getPost = await db.collection("blogPosts").doc(payload);
+      await getPost.delete();
     },
 
     async updateUserSettings({ commit, state }) {

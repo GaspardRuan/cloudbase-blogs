@@ -4,7 +4,7 @@
       <div class="icon">
         <Edit class="edit" />
       </div>
-      <div class="icon">
+      <div @click="deletePost" class="icon">
         <Delete class="delete" />
       </div>
     </div>
@@ -42,6 +42,11 @@ export default {
   },
   beforeDestroy() {
     this.$store.commit("toggleEditPost", false);
+  },
+  methods: {
+    deletePost() {
+      this.$store.dispatch("deletePost", this.post.blogId);
+    },
   },
 };
 </script>
