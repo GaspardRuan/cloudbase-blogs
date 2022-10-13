@@ -6,7 +6,7 @@ const app = cloudbase.init({
 });
 
 const auth = app.auth({
-  persistence: "none", //用户显式退出或更改密码之前的30天一直有效
+  persistence: "session", //用户显式退出或更改密码之前的30天一直有效
 });
 
 export { auth };

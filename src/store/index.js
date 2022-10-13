@@ -102,18 +102,22 @@ export default new Vuex.Store({
     },
 
     async getPost({ state }) {
-      const dataBase = await db.collection("blogPosts").orderBy("date", "desc");
-      const dbResults = await dataBase.get();
+      const dataBase = await cloudbase
+        .database()
+        .collection("blogPosts")
+        .orderBy("date", "desc")
+        .get();
+      const dbResults = await dataBase.data;
       dbResults.forEach((doc) => {
-        if (!state.blogPosts.some((post) => post.blogId === doc.id)) {
+        if (!state.blogPosts.some((post) => post.blogId === doc._id)) {
           const blog = {
-            blogId: doc.data().blogId,
-            blogHTML: doc.data().blogHTML,
-            blogCoverPhoto: doc.data().blogCoverPhoto,
-            blogCoverPhotoName: doc.data().blogCoverPhotoName,
-            blogTitle: doc.data().blogTitle,
+            blogId: doc._id,
+            blogHTML: doc.blogHTML,
+            blogCoverPhoto: doc.blogCoverPhoto,
+            blogCoverPhotoName: doc.blogCoverPhotoName,
+            blogTitle: doc.blogTitle,
             // profileId: doc.data().profileId,
-            blogDate: doc.data().date,
+            blogDate: doc.date,
           };
           state.blogPosts.push(blog);
         }
