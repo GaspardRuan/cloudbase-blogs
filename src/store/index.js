@@ -116,7 +116,7 @@ export default new Vuex.Store({
             blogCoverPhoto: doc.blogCoverPhoto,
             blogCoverPhotoName: doc.blogCoverPhotoName,
             blogTitle: doc.blogTitle,
-            // profileId: doc.data().profileId,
+            // profileId: doc.profileId,
             blogDate: doc.date,
           };
           state.blogPosts.push(blog);

@@ -49,14 +49,7 @@
 import Quill from "quill";
 import BlogCoverPreview from "../components/BlogCoverPreview.vue";
 // import firebase from "firebase/compat/app";
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from "firebase/storage";
-import "firebase/compat/auth";
-import db from "../firebase/firebaseInit";
+import cloudbase from "../tencent/init";
 import Loading from "@/components/Loading.vue";
 window.Quill = Quill;
 const ImageResize = require("quill-image-resize-module").default;
@@ -128,67 +121,60 @@ export default {
     },
 
     imageHandler(file, Editor, cursorLocation, resetUploader) {
-      const storage = getStorage();
-      const docRef = ref(storage, `documents/blogPostPhotos/${file.name}`);
-      const uploadTask = uploadBytesResumable(docRef, file);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + "% done");
-        },
-        (err) => {
-          console.log(err);
-        },
-        async () => {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          Editor.insertEmbed(cursorLocation, "image", downloadURL);
-          // console.log(downloadURL);
+      cloudbase
+        .uploadFile({
+          cloudPath: `documents/blogPostPhotos/${file.name}`,
+          filePath: file,
+          onUploadProgress: function (progressEvent) {
+            var progress = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            console.log("Upload is " + progress + "% done");
+          },
+        })
+        .then(async (res) => {
+          Editor.insertEmbed(cursorLocation, "image", res.download_url);
           resetUploader();
-        }
-      );
+        });
     },
 
     async updateBlog() {
-      const dataBase = await db.collection("blogPosts").doc(this.routeId);
+      const dataBase = await cloudbase
+        .database()
+        .collection("blogPosts")
+        .doc(this.routeId);
+      // console.log(dataBase);
       if (this.blogTitle.length !== 0 && this.blogHTML.length !== 0) {
         if (this.file) {
           this.loading = true;
-          const storage = getStorage();
-          const docRef = ref(
-            storage,
-            `documents/blogCoverPhotos/${this.$store.state.blogPhotoName}`
-          );
-          const uploadTask = uploadBytesResumable(docRef, this.file);
-          uploadTask.on(
-            "state_changed",
-            (snapshot) => {
-              const progress =
-                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-              console.log("Upload is " + progress + "% done");
-            },
-            (err) => {
-              console.log(err);
-              this.loading = false;
-            },
-            async () => {
-              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-
+          cloudbase
+            .uploadFile({
+              cloudPath: `documents/blogCoverPhotos/${this.$store.state.blogPhotoName}`,
+              filePath: this.file,
+              onUploadProgress: function (progressEvent) {
+                var progress = Math.round(
+                  (progressEvent.loaded * 100) / progressEvent.total
+                );
+                console.log("Upload is " + progress + "% done");
+              },
+            })
+            .then(async (res) => {
               await dataBase.update({
                 blogHTML: this.blogHTML,
-                blogCoverPhoto: downloadURL,
+                blogCoverPhoto: res.download_url,
                 blogCoverPhotoName: this.blogCoverPhotoName,
                 blogTitle: this.blogTitle,
               });
+
+              // console.log(doc);
               await this.$store.dispatch("updatePost", this.routeId);
               this.loading = false;
               this.$router.push({
                 name: "blog",
-                params: { blogid: dataBase.id },
+                params: { blogid: this.routeId },
               });
-            }
-          );
+              this.$store.commit("init");
+            });
           return;
         }
         this.loading = true;
@@ -200,7 +186,7 @@ export default {
         this.loading = false;
         this.$router.push({
           name: "blog",
-          params: { blogid: dataBase.id },
+          params: { blogid: this.routeId },
         });
         return;
       }
