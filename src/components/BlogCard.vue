@@ -1,7 +1,7 @@
 <template>
   <div class="blog-card">
-    <div @click="editBlog" v-show="editPost" class="icons">
-      <div class="icon">
+    <div v-show="editPost" class="icons">
+      <div @click="editBlog" class="icon">
         <Edit class="edit" />
       </div>
       <div @click="deletePost" class="icon">

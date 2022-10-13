@@ -1,8 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
 // import firebase from "firebase/compat/app";
-import "firebase/compat/auth";
-import db from "../firebase/firebaseInit";
 import cloudbase from "../tencent/init";
 Vue.use(Vuex);
 
@@ -132,9 +130,12 @@ export default new Vuex.Store({
     },
 
     async deletePost({ commit }, payload) {
+      const getPost = await cloudbase
+        .database()
+        .collection("blogPosts")
+        .doc(payload);
+      await getPost.remove();
       commit("filterBlogPost", payload);
-      const getPost = await db.collection("blogPosts").doc(payload);
-      await getPost.delete();
     },
 
     async updateUserSettings({ state }) {
