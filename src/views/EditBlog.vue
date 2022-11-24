@@ -145,6 +145,7 @@ export default {
         .doc(this.routeId);
       // console.log(dataBase);
       if (this.blogTitle.length !== 0 && this.blogHTML.length !== 0) {
+        this.file = this.$refs.blogPhoto.files[0];
         if (this.file) {
           this.loading = true;
           cloudbase

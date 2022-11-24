@@ -58,7 +58,7 @@ export default {
     closeModal() {
       this.modalActive = false;
       this.email = "";
-      this.$router.push({ name: "home" });
+      this.$router.push({ name: "login" });
     },
     async register() {
       if (this.email !== "" && this.password !== "") {
